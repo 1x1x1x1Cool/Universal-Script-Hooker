@@ -13,7 +13,7 @@ for i,v2 in pairs(game:GetDescendants()) do
                    if b == _Method then
                        print(b .. " found at:" .. v2.Name)
                        table.insert(Functions, v)
-                       table.insert(Wanted_script, V2)
+                       table.insert(Wanted_script, v2)
                        table.insert(Script_constants, i)
                    end
                end
