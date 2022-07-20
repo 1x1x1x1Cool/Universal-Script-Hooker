@@ -1,4 +1,4 @@
-local METHOD = "Kick"
+local METHOD = "Destroy"
 local _Check = "LocalPlayer"
 local constants = {}
 local functions = {}
@@ -36,17 +36,23 @@ end
 
 function is_player_Children(string)
 for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do 
-if v.Name == string then 
+    if v.Name == string then 
     return true 
     else 
         return false 
-end     
-end 
+    end     
+    end 
 end 
 -- print(is_player_Children("Head"))
 
 local scripttohook = {}
 for i,v in pairs(newwanted) do
+  if  WANTEDSCRIPT[i].Parent.Name == game:GetService("Players").LocalPlayer.Name and METHOD == "Destroy" then 
+     if  constants[newwanted[i] - 1] == "Parent" or constants[newwanted[i] - 2] == "Parent" then 
+         warn("Destroy method applied on localplayer")
+         table.insert(scripttohook, WANTEDSCRIPT[i])
+     end 
+     end 
   print(WANTEDSCRIPT[i],METHOD .." at function",getinfo(functions[i]).name, functions[i])
   if constants[newwanted[i] - 2] == _Check or constants[newwanted[i] - 1] == _Check then
       warn(METHOD, "on " .. _Check .. " found!", "script name:" ,WANTEDSCRIPT[i])
