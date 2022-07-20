@@ -1,5 +1,6 @@
 local METHOD = "FireServer"
 local _Check = "LocalPlayer"
+local HowDoesThisRemoteGetFired = "RemoteEvent"
 local constants = {}
 local functions = {}
 local wanted = {}
@@ -72,7 +73,7 @@ end
 
 local scripttohook = {}
 for i,v in pairs(newwanted) do
-    print(constants[newwanted[i] - 1])
+    --print(constants[newwanted[i] - 1])
     -- Team change remote event checker
      if METHOD == "FireServer" and BrickColor.new(constants[newwanted[i] - 1]) ~= BrickColor.new("Medium stone grey")  then 
          warn(" Possible Team RemoteEvent found at script:", WANTEDSCRIPT[i])
@@ -85,11 +86,21 @@ local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
  for i,v in pairs(table1) do 
          if table.concat(table.concat(v:split("if")):split("WalkSpeed")) ~= v then 
                      warn("Found if statement with walkspeed at", WANTEDSCRIPT[i], "With a remote event fired")
+                     table.insert(scripttohook, WANTEDSCRIPT[i])
 end 
 end 
 end 
 
 
+if METHOD == "FireServer" then 
+    local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
+ local table1 = script:split("\n")
+ for i,c in pairs(table1) do 
+     if table.concat(c:split(HowDoesThisRemoteGetFired)) ~= c then 
+         warn(HowDoesThisRemoteGetFired .."gets fired as: \n\n" .. c .. "\n")
+end 
+end 
+end 
     
      
      
