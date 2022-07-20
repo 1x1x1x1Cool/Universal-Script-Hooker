@@ -1,4 +1,4 @@
-local METHOD = "Kick"
+local METHOD = "FireServer"
 local _Check = "LocalPlayer"
 local constants = {}
 local functions = {}
@@ -72,13 +72,25 @@ end
 
 local scripttohook = {}
 for i,v in pairs(newwanted) do
+    print(constants[newwanted[i] - 1])
     -- Team change remote event checker
      if METHOD == "FireServer" and BrickColor.new(constants[newwanted[i] - 1]) ~= BrickColor.new("Medium stone grey")  then 
          warn(" Possible Team RemoteEvent found at script:", WANTEDSCRIPT[i])
           end 
      
      
-     
+if METHOD == "FireServer" then 
+local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
+ local table1 = script:split("\n")
+ for i,v in pairs(table1) do 
+         if table.concat(table.concat(v:split("if")):split("WalkSpeed")) ~= v then 
+                     warn("Found if statement with walkspeed at", WANTEDSCRIPT[i], "With a remote event fired")
+end 
+end 
+end 
+
+
+    
      
      
      
@@ -109,7 +121,6 @@ end
 
 -- Kick checker
  if  WANTEDSCRIPT[i].Parent.Name == game:GetService("Players").LocalPlayer.Name and METHOD == "Kick" then
-     print(constants[newwanted[i] - 1])
    if  constants[newwanted[i] - 1] == "Parent" or constants[newwanted[i] - 2] == "Parent" or is_player_Children(constants[newwanted[i] - 2]) == true or is_player_Children(constants[newwanted[i] - 1]) == true or Contains_Number(constants[newwanted[i] - 1]) == true  then
        warn(METHOD," method applied on localplayer by;",  WANTEDSCRIPT[i])
        table.insert(scripttohook, WANTEDSCRIPT[i])
