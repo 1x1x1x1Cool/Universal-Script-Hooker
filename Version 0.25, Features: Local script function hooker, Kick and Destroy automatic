@@ -1,6 +1,7 @@
-local METHOD = "FireServer"
-local _Check = "LocalPlayer"
-local HowDoesThisRemoteGetFired = "RemoteEvent"
+local METHOD = "FireServer" -- METHOD, could be Clone, Destroy....
+local _Check = "LocalPlayer" -- check the instance that gets fired with the METHOD
+local HowDoesThisRemoteGetFired = "Options" -- Name of the RemoteEvent here, METHOD must be set to FireServer, it may require some time
+local CheckForIfWalkSpeed = false -- really slow, METHOD must be set to FireServer
 local constants = {}
 local functions = {}
 local wanted = {}
@@ -77,19 +78,7 @@ for i,v in pairs(newwanted) do
     -- Team change remote event checker
      if METHOD == "FireServer" and BrickColor.new(constants[newwanted[i] - 1]) ~= BrickColor.new("Medium stone grey")  then 
          warn(" Possible Team RemoteEvent found at script:", WANTEDSCRIPT[i])
-          end 
-     
-     
-if METHOD == "FireServer" then 
-local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
- local table1 = script:split("\n")
- for i,v in pairs(table1) do 
-         if table.concat(table.concat(v:split("if")):split("WalkSpeed")) ~= v then 
-                     warn("Found if statement with walkspeed at", WANTEDSCRIPT[i], "With a remote event fired")
-                     table.insert(scripttohook, WANTEDSCRIPT[i])
-end 
-end 
-end 
+     end
 
 
 if METHOD == "FireServer" then 
@@ -98,9 +87,26 @@ if METHOD == "FireServer" then
  for i,c in pairs(table1) do 
      if table.concat(c:split(HowDoesThisRemoteGetFired)) ~= c then 
          warn(HowDoesThisRemoteGetFired .."gets fired as: \n\n" .. c .. "\n")
+         print("Loading..." .. i.."/"..#WANTEDSCRIPT)
 end 
 end 
 end 
+   
+   
+     
+if METHOD == "FireServer" and CheckForIfWalkSpeed == true then 
+local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
+ local table1 = script:split("\n")
+ for i,v in pairs(table1) do 
+         if table.concat(table.concat(v:split("if")):split("WalkSpeed")) ~= v then 
+             if WANTEDSCRIPT[i] ~= nil then 
+                     warn("Found if statement with walkspeed at", WANTEDSCRIPT[i], "With a remote event fired")
+                     table.insert(scripttohook, WANTEDSCRIPT[i])
+end
+end
+end
+end 
+
     
      
      
