@@ -47,13 +47,14 @@ end
 
 local scripttohook = {}
 for i,v in pairs(newwanted) do
+    -- Destroy checker
   if  WANTEDSCRIPT[i].Parent.Name == game:GetService("Players").LocalPlayer.Name and METHOD == "Destroy" then 
      if  constants[newwanted[i] - 1] == "Parent" or constants[newwanted[i] - 2] == "Parent" or is_player_Children(constants[newwanted[i] - 2]) == true or is_player_Children(constants[newwanted[i] - 1]) == true  then 
          warn(METHOD.. " method applied on localplayer")
          table.insert(scripttohook, WANTEDSCRIPT[i])
      end 
   end 
-  
+  -- Kick checker
    if  WANTEDSCRIPT[i].Parent.Name == game:GetService("Players").LocalPlayer.Name and METHOD == "Kick" then 
      if  constants[newwanted[i] - 1] == "Parent" or constants[newwanted[i] - 2] == "Parent" or is_player_Children(constants[newwanted[i] - 2]) == true or is_player_Children(constants[newwanted[i] - 1]) == true  then 
          warn(METHOD.. " method applied on localplayer")
