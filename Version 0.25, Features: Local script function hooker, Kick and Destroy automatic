@@ -1,4 +1,4 @@
-local METHOD = "Kick"
+local METHOD = "FireServer"
 local _Check = "LocalPlayer"
 local constants = {}
 local functions = {}
@@ -45,8 +45,20 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants
 end
 -- print(is_player_Children("Head"))
 
+
+
 local scripttohook = {}
 for i,v in pairs(newwanted) do
+    -- Team change remote event checker
+     if METHOD == "FireServer" and BrickColor.new(constants[newwanted[i] - 1]) ~= BrickColor.new("Medium stone grey") then 
+         warn(" Possible Team RemoteEvent found at script:", WANTEDSCRIPT[i])
+        end
+     
+     
+     
+     
+     
+     
   -- Destroy checker
 if  WANTEDSCRIPT[i].Parent.Name == game:GetService("Players").LocalPlayer.Name and METHOD == "Destroy" then
    if  constants[newwanted[i] - 1] == "Parent" or constants[newwanted[i] - 2] == "Parent" or is_player_Children(constants[newwanted[i] - 2]) == true or is_player_Children(constants[newwanted[i] - 1]) == true  then
@@ -69,6 +81,7 @@ end
             table.insert(scripttohook, WANTEDSCRIPT[i])
 end
 end
+
 
 print("\n\n".. #newwanted.. " " .. METHOD .. " constants " .. "Found!" .. " On a total of: " .. #constants .. " constants" .. "\n")
 
