@@ -26,14 +26,14 @@ end
 end
 end
 
-print(#constants.. " constants Found!")
+
 local newwanted = {}
 for i,v in pairs(constants) do
    if v == METHOD  then
        table.insert(newwanted, i)
    end
 end
-print(#newwanted .. " wanted constants found")
+
 local scripttohook = {}
 for i,v in pairs(newwanted) do
   print(WANTEDSCRIPT[i],METHOD .." at function",getinfo(functions[i]).name, functions[i])
@@ -42,7 +42,7 @@ for i,v in pairs(newwanted) do
               table.insert(scripttohook, WANTEDSCRIPT[i])
       end
 end
-
+print(#newwanted.. " constants Found!" .. " On a total of: " .. #constants .. " constants")
 
 local X;
 X = hookmetamethod(table.find(scripttohook, self),"__namecall",function(self,...)
