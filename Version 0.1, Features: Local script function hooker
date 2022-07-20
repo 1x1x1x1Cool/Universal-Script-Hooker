@@ -1,43 +1,55 @@
-local _Method = "Kick"
+local METHOD = "Kick"
 local _Check = "LocalPlayer"
-local Script_constants = {}
-local Functions = {}
-local Wanted_script = {}
-
+local constants = {}
+local functions = {}
+local wanted = {}
+local wanted2 = {}
+local newconstants = {}
+local WANTEDSCRIPT = {}
 for i,v2 in pairs(game:GetDescendants()) do
-   if v2:IsA("LocalScript") then
-       local success,currscript = pcall(function() return getprotos(getscriptclosure(v2)) end)
-       if success then
-           for index,v in pairs(currscript) do
-               for i,b in pairs(getconstants(v)) do
-                   if b == _Method then
-                       print(b .. " found at:" .. v2.Name)
-                       table.insert(Functions, v)
-                       table.insert(Wanted_script, v2)
-                       table.insert(Script_constants, i)
-                   end
-               end
-           end
-       end
-   end
+if v2:IsA("LocalScript") then
+local LOCALSCRIPTD = v2
+local script = getprotos(getscriptclosure(v2))
+for index,v in pairs(script) do
+  for i,b in pairs(getconstants(v)) do
+      table.insert(constants, b)
+      if b == METHOD then
+        table.insert(functions, v)
+        table.insert(newconstants, b)
+        table.insert(wanted, i)
+        table.insert(wanted2, index)
+        print(b .. " found at:" .. v2.Name)
+        table.insert(WANTEDSCRIPT, LOCALSCRIPTD)
+        end
+    end
 end
-print(#Script_constants.. " constants Found!")
+end
+end
 
-local scripttohook = {}
-for i,v in pairs(Script_constants) do
-   print(Wanted_script[i], _Method .. " at function", getinfo(Functions[i]).name, Functions[i])
-   if Script_constants[Script_constants[i] - 2] == _Check or Script_constants[Script_constants[i] - 1] == _Check then
-       warn(_Method, "on " .. _Check .. " found!", "script name:" , Wanted_script[i])
-       table.insert(scripttohook, Wanted_script[i])
+print(#constants.. " constants Found!")
+local newwanted = {}
+for i,v in pairs(constants) do
+   if v == METHOD  then
+       table.insert(newwanted, i)
    end
 end
+print(#newwanted .. " wanted constants found")
+local scripttohook = {}
+for i,v in pairs(newwanted) do
+  print(WANTEDSCRIPT[i],METHOD .." at function",getinfo(functions[i]).name, functions[i])
+  if constants[newwanted[i] - 2] == _Check or constants[newwanted[i] - 1] == _Check then
+      warn(METHOD, "on " .. _Check .. " found!", "script name:" ,WANTEDSCRIPT[i])
+              table.insert(scripttohook, WANTEDSCRIPT[i])
+      end
+end
+
 
 local X;
-X = hookmetamethod(game, "__namecall", function(self,...)
-   local args = {...};
-   local method = getnamecallmethod()
-   if method == _Method and table.find(scripttohook, self) then
-       return;
-   end
-   return X(self,...)
+X = hookmetamethod(table.find(scripttohook, self),"__namecall",function(self,...)
+  local args = {...};
+  local method = getnamecallmethod()
+  if method == METHOD then
+      return
+end
+  return X(self,...)
 end)
