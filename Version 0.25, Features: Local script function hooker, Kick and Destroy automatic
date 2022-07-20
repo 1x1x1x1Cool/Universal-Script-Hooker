@@ -98,7 +98,8 @@ end
      if table.concat(v:split("Kick")) ~= v then 
          if table.concat(v:split("LocalPlayer")) ~= v then 
              if WANTEDSCRIPT[i] ~= nil then 
-             warn("Kick variable found at:", WANTEDSCRIPT[i])
+             warn("Kick variable fired on LocalPlayer found at:", WANTEDSCRIPT[i])
+             print("Loading..." .. i.."/"..#WANTEDSCRIPT)
              end 
          end
      end 
