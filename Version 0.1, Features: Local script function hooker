@@ -1,4 +1,4 @@
-local METHOD = "Destroy"
+local METHOD = "Kick"
 local _Check = "LocalPlayer"
 local constants = {}
 local functions = {}
@@ -49,16 +49,26 @@ local scripttohook = {}
 for i,v in pairs(newwanted) do
   if  WANTEDSCRIPT[i].Parent.Name == game:GetService("Players").LocalPlayer.Name and METHOD == "Destroy" then 
      if  constants[newwanted[i] - 1] == "Parent" or constants[newwanted[i] - 2] == "Parent" or is_player_Children(constants[newwanted[i] - 2]) == true or is_player_Children(constants[newwanted[i] - 1]) == true  then 
-         warn("Destroy method applied on localplayer")
+         warn(METHOD.. " method applied on localplayer")
          table.insert(scripttohook, WANTEDSCRIPT[i])
      end 
+  end 
+  
+   if  WANTEDSCRIPT[i].Parent.Name == game:GetService("Players").LocalPlayer.Name and METHOD == "Kick" then 
+     if  constants[newwanted[i] - 1] == "Parent" or constants[newwanted[i] - 2] == "Parent" or is_player_Children(constants[newwanted[i] - 2]) == true or is_player_Children(constants[newwanted[i] - 1]) == true  then 
+         warn(METHOD.. " method applied on localplayer")
+         table.insert(scripttohook, WANTEDSCRIPT[i])
      end 
+   end
+ 
   print(WANTEDSCRIPT[i],METHOD .." at function",getinfo(functions[i]).name, functions[i])
+  
   if constants[newwanted[i] - 2] == _Check or constants[newwanted[i] - 1] == _Check then
       warn(METHOD, "on " .. _Check .. " found!", "script name:" ,WANTEDSCRIPT[i])
               table.insert(scripttohook, WANTEDSCRIPT[i])
 end
 end 
+
 print("\n\n".. #newwanted.. " " .. METHOD .. " constants " .. "Found!" .. " On a total of: " .. #constants .. " constants" .. "\n")
 
 for i,v in pairs(scripttohook) do 
