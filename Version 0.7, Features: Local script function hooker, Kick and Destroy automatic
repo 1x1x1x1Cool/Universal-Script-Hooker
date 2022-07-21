@@ -1,16 +1,20 @@
 ---------------------------------------
-local SCRIPT = "ModuleScript"
-local PATH = game.Players.LocalPlayer.Character
-local METHOD = "FireServer" -- METHOD, could be Clone, Destroy....
+local SCRIPT = "LocalScript" -- LocalScript or ModuleScript
+local PATH = game
+local METHOD = "Kick" -- METHOD, could be Clone, Destroy....
 local _Check = "LocalPlayer" -- check the instance that gets fired with the METHOD
 local HowDoesThisRemoteGetFired = "RemoteEvent" -- Name of the RemoteEvent here, METHOD must be set to FireServer,
 -- HowDoesThisRemoteGetFired needs remoteReader set to true
-local CheckForIfWalkSpeed = true -- really slow, METHOD must be set to FireServer
+local CheckForIfWalkSpeed = false -- really slow, METHOD must be set to FireServer
 local slowkickdetection = false -- slow, decompiles every localscript to find kicks with variables, METHOD must be set to "Kick"
 local RemoteReader = false
 local PrintOutKicks = false -- prints out how the kick are fired 
 local ANTIDECOMPILERBYPASS = false -- only for Kick method, fast if other variables are toggled
-local PrintOutFireServer = true
+local PrintOutFireServer = false -- needs METHOD to be set to "FireServer"
+local PrintOutInvokeServer =  false -- needs METHOD to be set to "InvokeServer"
+local WhatMethodYouWantToPrintOut = "Kick" -- MUST correspond with the current method, specifies the the decompiled string of it 
+
+
 ------------------------------------
 local constants = {}
 local functions = {}
@@ -186,6 +190,30 @@ end
 end 
 end 
 
+
+
+
+if METHOD == WhatMethodYouWantToPrintOut then 
+    local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
+    if table.concat(script:split(" ")) == "" then 
+    warn("                 ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with".. METHOD .. " method")
+else 
+    print()
+end 
+local table1 = script:split("\n")
+for i2,v in pairs(table1) do
+    if table.concat(v:split(METHOD))  ~= v or table.concat(v:split(string.lower(METHOD))) ~= v then 
+            warn("💀 ".."PrintOut"..METHOD.. "Checker Debugger here: " ..v .. "  at localscript", WANTEDSCRIPT[i], "💀")
+           
+     
+end 
+end 
+end 
+
+
+
+
+
 if METHOD == "FireServer" and PrintOutFireServer == true then 
     local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
     if table.concat(script:split(" ")) == "" then 
@@ -202,6 +230,25 @@ for i2,v in pairs(table1) do
 end 
 end 
 end 
+
+
+if METHOD == "InvokeServer" and PrintOutInvokeServer == true then 
+    local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
+    if table.concat(script:split(" ")) == "" then 
+    warn("                 ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with InvokeServer method")
+else 
+    print()
+end 
+local table1 = script:split("\n")
+for i2,v in pairs(table1) do
+    if table.concat(v:split("InvokeServer"))  ~= v or table.concat(v:split("invokeserver")) ~= v then 
+            warn("💀 ".."PrintOutRemoteFunctions Debugger here: " ..v .. "  at localscript", WANTEDSCRIPT[i], "💀")
+           
+     
+end 
+end 
+end 
+
 
 
 
