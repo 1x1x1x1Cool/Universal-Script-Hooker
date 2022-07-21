@@ -117,7 +117,9 @@ end
 
  
  if  ANTIDECOMPILERBYPASS == true then 
+  
      warn("Anti decompiler debugger: " ..  METHOD .. "(" .. constants[newwanted[i] - 1] .. " " ..constants[newwanted[i] - 2] .. ")")
+
 end 
  
  
