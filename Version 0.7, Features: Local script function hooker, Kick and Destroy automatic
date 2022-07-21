@@ -1,6 +1,6 @@
 ---------------------------------------
 local PATH = game
-local METHOD = "WalkSpeed" -- METHOD, could be Clone, Destroy....
+local METHOD = "Clone" -- METHOD, could be Clone, Destroy....
 local _Check = "LocalPlayer" -- check the instance that gets fired with the METHOD
 local HowDoesThisRemoteGetFired = "RemoteEvent" -- Name of the RemoteEvent here, METHOD must be set to FireServer,
 -- HowDoesThisRemoteGetFired needs remoteReader set to true
@@ -119,12 +119,16 @@ end
  if  ANTIDECOMPILERBYPASS == true then 
     local warranty = constants[newwanted[i] - 1]
     local warranty2 = constants[newwanted[i] - 2]
+    local warranty3 = constants[newwanted[i] - 3]
        if type(warranty) ~= "userdata" then 
            warn("on the script :", WANTEDSCRIPT[i], " there is a ", METHOD, "on ",  warranty)
             if type(warranty2) ~= "userdata"  then 
                 warn("on the script :", WANTEDSCRIPT[i], " there is a ", METHOD, "on ",  warranty2)
                 if type(warranty2)  ~= "userdata" and type(warranty)  ~= "userdata" then 
                     warn("on the script :", WANTEDSCRIPT[i], " there is a ", METHOD, "on ", warranty .. "."..warranty2)
+                end 
+                if type(warranty) ~= "userdata" and type(warranty2) ~= "userdata" and  type(warranty3) ~= "userdata" then 
+                    warn("on the script :", WANTEDSCRIPT[i], " there is a ", METHOD, "on ", warranty .."."..  warranty2.. ".".. warranty3)
                     end 
            end 
       end    
