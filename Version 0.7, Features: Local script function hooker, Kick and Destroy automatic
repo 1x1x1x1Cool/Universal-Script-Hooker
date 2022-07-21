@@ -1,6 +1,6 @@
 ---------------------------------------
 local PATH = game
-local METHOD = "Clone" -- METHOD, could be Clone, Destroy....
+local METHOD = "Disconnect" -- METHOD, could be Clone, Destroy....
 local _Check = "LocalPlayer" -- check the instance that gets fired with the METHOD
 local HowDoesThisRemoteGetFired = "RemoteEvent" -- Name of the RemoteEvent here, METHOD must be set to FireServer,
 -- HowDoesThisRemoteGetFired needs remoteReader set to true
