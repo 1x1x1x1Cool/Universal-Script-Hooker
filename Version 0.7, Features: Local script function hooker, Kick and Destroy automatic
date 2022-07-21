@@ -131,6 +131,11 @@ end
 if METHOD == "Kick" and slowkickdetection == true then
 local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
 local table1 = script:split("\n")
+   if table.concat(script:split(" ")) == "" then 
+    warn("              ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with KICK method")
+else 
+    print()
+end 
 for i,v in pairs(table1) do
    if table.concat(v:split("Kick")) ~= v then
        if table.concat(v:split("LocalPlayer")) ~= v then
@@ -147,9 +152,14 @@ end
 
 if METHOD == "Kick" and PrintOutKicks == true then 
     local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
+    if table.concat(script:split(" ")) == "" then 
+    warn("                 ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with KICK method")
+else 
+    print()
+end 
 local table1 = script:split("\n")
 for i2,v in pairs(table1) do
-    if table.concat(v:split("Kick"))  ~= v then 
+    if table.concat(v:split("Kick"))  ~= v or table.concat(v:split("kick")) then 
             warn("💀 ".."PrintOutKicks Debugger here: " ..v .. "  at localscript", WANTEDSCRIPT[i], "💀")
            
      
