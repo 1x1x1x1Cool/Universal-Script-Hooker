@@ -1,14 +1,16 @@
 ---------------------------------------
-local PATH = game
-local METHOD = "Disconnect" -- METHOD, could be Clone, Destroy....
+local SCRIPT = "ModuleScript"
+local PATH = game.Players.LocalPlayer.Character
+local METHOD = "FireServer" -- METHOD, could be Clone, Destroy....
 local _Check = "LocalPlayer" -- check the instance that gets fired with the METHOD
 local HowDoesThisRemoteGetFired = "RemoteEvent" -- Name of the RemoteEvent here, METHOD must be set to FireServer,
 -- HowDoesThisRemoteGetFired needs remoteReader set to true
-local CheckForIfWalkSpeed = false -- really slow, METHOD must be set to FireServer
+local CheckForIfWalkSpeed = true -- really slow, METHOD must be set to FireServer
 local slowkickdetection = false -- slow, decompiles every localscript to find kicks with variables, METHOD must be set to "Kick"
 local RemoteReader = false
 local PrintOutKicks = false -- prints out how the kick are fired 
-local ANTIDECOMPILERBYPASS = true -- only for Kick method, fast if other variables are toggled
+local ANTIDECOMPILERBYPASS = false -- only for Kick method, fast if other variables are toggled
+local PrintOutFireServer = true
 ------------------------------------
 local constants = {}
 local functions = {}
@@ -17,7 +19,7 @@ local wanted2 = {}
 local newconstants = {}
 local WANTEDSCRIPT = {}
 for i,v2 in pairs(PATH:GetDescendants()) do
-if v2:IsA("LocalScript") then
+if v2:IsA(SCRIPT) then
 local LOCALSCRIPTD = v2
 local script = getprotos(getscriptclosure(v2))
 for index,v in pairs(script) do
@@ -166,7 +168,7 @@ for i,v in pairs(table1) do
 end
 end
 
-
+-- kicker printer
 if METHOD == "Kick" and PrintOutKicks == true then 
     local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
     if table.concat(script:split(" ")) == "" then 
@@ -176,13 +178,32 @@ else
 end 
 local table1 = script:split("\n")
 for i2,v in pairs(table1) do
-    if table.concat(v:split("Kick"))  ~= v or table.concat(v:split("kick")) then 
+    if table.concat(v:split("Kick"))  ~= v or table.concat(v:split("kick")) ~= v then 
             warn("💀 ".."PrintOutKicks Debugger here: " ..v .. "  at localscript", WANTEDSCRIPT[i], "💀")
            
      
 end 
 end 
 end 
+
+if METHOD == "FireServer" and PrintOutFireServer == true then 
+    local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
+    if table.concat(script:split(" ")) == "" then 
+    warn("                 ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with FireServer method")
+else 
+    print()
+end 
+local table1 = script:split("\n")
+for i2,v in pairs(table1) do
+    if table.concat(v:split("FireServer"))  ~= v or table.concat(v:split("fireserver")) ~= v then 
+            warn("💀 ".."PrintOutRemoteEvents Debugger here: " ..v .. "  at localscript", WANTEDSCRIPT[i], "💀")
+           
+     
+end 
+end 
+end 
+
+
 
 -- Kick checker
 if  WANTEDSCRIPT[i].Parent.Name == game:GetService("Players").LocalPlayer.Name and METHOD == "Kick" then
