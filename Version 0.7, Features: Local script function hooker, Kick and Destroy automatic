@@ -39,29 +39,7 @@ end
 end
 
 local function Contains_Number(string)
-if table.concat(string:split("1")) ~= string then
-  return true
-elseif table.concat(string:split("2")) ~= string then
- return true
-elseif table.concat(string:split("3")) ~= string then
-  return true
-elseif table.concat(string:split("4")) ~= string then
-  return true
-  elseif table.concat(string:split("5")) ~= string then
-  return true
-  elseif table.concat(string:split("6")) ~= string then
-  return true
-  elseif table.concat(string:split("7")) ~= string then
-  return true
-  elseif table.concat(string:split("8")) ~= string then
-  return true
-  elseif table.concat(string:split("9")) ~= string then
-  return true
-  elseif table.concat(string:split("0")) ~= string then
-  return true
-else
-  return false
-end
+    return string:match("[0-9]") ~= nil
 end
 
 local newwanted = {}
