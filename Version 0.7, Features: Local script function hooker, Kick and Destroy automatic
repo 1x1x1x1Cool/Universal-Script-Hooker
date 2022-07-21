@@ -1,7 +1,4 @@
-
------------ Try this  script on the roblox game called Pastriez Cafe Roblox!
-
--------------------------------------- Start of settings
+---------------------------------------
 local PATH = game:GetService("Players").LocalPlayer.PlayerScripts
 local METHOD = "Kick" -- METHOD, could be Clone, Destroy....
 local _Check = "LocalPlayer" -- check the instance that gets fired with the METHOD
@@ -10,8 +7,9 @@ local HowDoesThisRemoteGetFired = "RemoteEvent" -- Name of the RemoteEvent here,
 local CheckForIfWalkSpeed = false -- really slow, METHOD must be set to FireServer
 local slowkickdetection = false -- slow, decompiles every localscript to find kicks with variables, METHOD must be set to "Kick"
 local RemoteReader = false
-local PrintOutKicks = true -- Prints out the strings of the decompiled code where's called the kick function
--------------------------------- End of  settings
+local PrintOutKicks = false -- prints out how the kick are fired 
+local ANTIDECOMPILERBYPASS = true -- only for Kick method, fast if other variables are toggled
+------------------------------------
 local constants = {}
 local functions = {}
 local wanted = {}
@@ -118,7 +116,9 @@ end
 end
 
  
- 
+ if METHOD == "Kick" and ANTIDECOMPILERBYPASS == true then 
+     warn("Anti decompiler debugger: Kick(" .. constants[newwanted[i] - 1] .. " " ..constants[newwanted[i] - 2] .. " " .. constants[newwanted[i] - 3].. ")")
+end 
  
  
 -- Destroy checker
