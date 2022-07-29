@@ -259,7 +259,7 @@ for index,v3 in pairs(PATH:GetDescendants()) do
          table.insert(totalscripts, index)
          local script = decompile(getscriptclosure(v3))
          local table1 = script:split("\n")
-         print("Loading.. " .. "#" ..  #totalscripts)
+         print("Loading.. " .. "#" ..  #totalscripts .. " the script", v3)
 local ends = {}
 local endpositions = {} 
 for i2,v in pairs(table1) do 
