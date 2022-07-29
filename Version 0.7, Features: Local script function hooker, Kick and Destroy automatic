@@ -1,18 +1,19 @@
----------------------------------------
 local SCRIPT = "LocalScript" -- LocalScript or ModuleScript
 local PATH = game
-local METHOD = "Kick" -- METHOD, could be Clone, Destroy....
+local METHOD = "FireServer" -- METHOD, could be Clone, Destroy....
 local _Check = "LocalPlayer" -- check the instance that gets fired with the METHOD
 local HowDoesThisRemoteGetFired = "RemoteEvent" -- Name of the RemoteEvent here, METHOD must be set to FireServer,
 -- HowDoesThisRemoteGetFired needs remoteReader set to true
 local CheckForIfWalkSpeed = false -- really slow, METHOD must be set to FireServer
 local slowkickdetection = false -- slow, decompiles every localscript to find kicks with variables, METHOD must be set to "Kick"
 local RemoteReader = false
-local PrintOutKicks = false -- prints out how the kick are fired 
+local PrintOutKicks = false -- prints out how the kick are fired
 local ANTIDECOMPILERBYPASS = false -- only for Kick method, fast if other variables are toggled
 local PrintOutFireServer = false -- needs METHOD to be set to "FireServer"
 local PrintOutInvokeServer =  false -- needs METHOD to be set to "InvokeServer"
-local WhatMethodYouWantToPrintOut = "Kick" -- MUST correspond with the current method, specifies the the decompiled string of it 
+local WhatMethodYouWantToPrintOut = "FireServer" -- MUST correspond with the current method, specifies the the decompiled string of it
+
+local ConnectScan = true -- method must be set to Connect, checks for OnClientEvents
 
 
 ------------------------------------
@@ -28,15 +29,15 @@ local LOCALSCRIPTD = v2
 local script = getprotos(getscriptclosure(v2))
 for index,v in pairs(script) do
 for i,b in pairs(getconstants(v)) do
-  table.insert(constants, b)
-  if b == METHOD then
-    table.insert(functions, v)
-    table.insert(newconstants, b)
-    table.insert(wanted, i)
-    table.insert(wanted2, index)
-    print(b .. " found at:" .. v2.Name)
-    table.insert(WANTEDSCRIPT, LOCALSCRIPTD)
-    end
+table.insert(constants, b)
+if b == METHOD then
+  table.insert(functions, v)
+  table.insert(newconstants, b)
+  table.insert(wanted, i)
+  table.insert(wanted2, index)
+  print(b .. " found at:" .. v2.Name)
+  table.insert(WANTEDSCRIPT, LOCALSCRIPTD)
+  end
 end
 end
 end
@@ -44,34 +45,34 @@ end
 
 local function Contains_Number(string)
 if table.concat(string:split("1")) ~= string then
-  return true
+return true
 elseif table.concat(string:split("2")) ~= string then
- return true
+return true
 elseif table.concat(string:split("3")) ~= string then
-  return true
+return true
 elseif table.concat(string:split("4")) ~= string then
-  return true
-  elseif table.concat(string:split("5")) ~= string then
-  return true
-  elseif table.concat(string:split("6")) ~= string then
-  return true
-  elseif table.concat(string:split("7")) ~= string then
-  return true
-  elseif table.concat(string:split("8")) ~= string then
-  return true
-  elseif table.concat(string:split("9")) ~= string then
-  return true
-  elseif table.concat(string:split("0")) ~= string then
-  return true
+return true
+elseif table.concat(string:split("5")) ~= string then
+return true
+elseif table.concat(string:split("6")) ~= string then
+return true
+elseif table.concat(string:split("7")) ~= string then
+return true
+elseif table.concat(string:split("8")) ~= string then
+return true
+elseif table.concat(string:split("9")) ~= string then
+return true
+elseif table.concat(string:split("0")) ~= string then
+return true
 else
-  return false
+return false
 end
 end
 
 local newwanted = {}
 for i,v in pairs(constants) do
 if v == METHOD  then
-   table.insert(newwanted, i)
+ table.insert(newwanted, i)
 end
 end
 
@@ -80,7 +81,7 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants
 if v.Name == string then
 return true
 else
-    return false
+  return false
 end    
 end
 end
@@ -88,65 +89,65 @@ end
 
 local scripttohook = {}
 for i,v in pairs(newwanted) do
-  --print(constants[newwanted[i] - 1])
-  -- Team change remote event checker
-   if METHOD == "FireServer" and BrickColor.new(constants[newwanted[i] - 1]) ~= BrickColor.new("Medium stone grey")  then
-       warn(" Possible Team RemoteEvent found at script:", WANTEDSCRIPT[i])
-   end
+--print(constants[newwanted[i] - 1])
+-- Team change remote event checker
+ if METHOD == "FireServer" and BrickColor.new(constants[newwanted[i] - 1]) ~= BrickColor.new("Medium stone grey")  then
+     warn(" Possible Team RemoteEvent found at script:", WANTEDSCRIPT[i])
+ end
 
 
 if METHOD == "FireServer" and RemoteReader == true  then
-  local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
+local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
 local table1 = script:split("\n")
 for i,c in pairs(table1) do
-   if table.concat(c:split(HowDoesThisRemoteGetFired)) ~= c then
-       warn(HowDoesThisRemoteGetFired .." gets fired as: \n\n" .. c .. "\n")
-       print("Loading..." .. i.."/"..#WANTEDSCRIPT)
+ if table.concat(c:split(HowDoesThisRemoteGetFired)) ~= c then
+     warn(HowDoesThisRemoteGetFired .." gets fired as: \n\n" .. c .. "\n")
+     print("Loading..." .. i.."/"..#WANTEDSCRIPT)
 end
 end
 end
 
 
- 
+
 if METHOD == "FireServer" and CheckForIfWalkSpeed == true then
 local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
 local table1 = script:split("\n")
 for i,v in pairs(table1) do
-       if table.concat(table.concat(v:split("if")):split("WalkSpeed")) ~= v then
-           if WANTEDSCRIPT[i] ~= nil then
-                   warn("Found if statement with walkspeed at", WANTEDSCRIPT[i], "With a remote event fired")
-                   table.insert(scripttohook, WANTEDSCRIPT[i])
+     if table.concat(table.concat(v:split("if")):split("WalkSpeed")) ~= v then
+         if WANTEDSCRIPT[i] ~= nil then
+                 warn("Found if statement with walkspeed at", WANTEDSCRIPT[i], "With a remote event fired")
+                 table.insert(scripttohook, WANTEDSCRIPT[i])
 end
 end
 end
 end
 
- 
- if  ANTIDECOMPILERBYPASS == true then 
-    local warranty = constants[newwanted[i] - 1]
-    local warranty2 = constants[newwanted[i] - 2]
-    local warranty3 = constants[newwanted[i] - 3]
-       if type(warranty) ~= "userdata" then 
-           warn("on the script :", WANTEDSCRIPT[i], " there is a ", METHOD, "on ",  warranty)
-            if type(warranty2) ~= "userdata"  then 
-                warn("on the script :", WANTEDSCRIPT[i], " there is a ", METHOD, "on ",  warranty2)
-                if type(warranty2)  ~= "userdata" and type(warranty)  ~= "userdata" then 
-                    warn("on the script :", WANTEDSCRIPT[i], " there is a ", METHOD, "on ", warranty .. "."..warranty2)
-                end 
-                if type(warranty) ~= "userdata" and type(warranty2) ~= "userdata" and  type(warranty3) ~= "userdata" then 
-                    warn("on the script :", WANTEDSCRIPT[i], " there is a ", METHOD, "on ", warranty .."."..  warranty2.. ".".. warranty3)
-                    end 
-           end 
-      end    
-end 
- 
- 
+
+if  ANTIDECOMPILERBYPASS == true then
+  local warranty = constants[newwanted[i] - 1]
+  local warranty2 = constants[newwanted[i] - 2]
+  local warranty3 = constants[newwanted[i] - 3]
+     if type(warranty) ~= "userdata" then
+         warn("on the script :", WANTEDSCRIPT[i], " there is a ", METHOD, "on ",  warranty)
+          if type(warranty2) ~= "userdata"  then
+              warn("on the script :", WANTEDSCRIPT[i], " there is a ", METHOD, "on ",  warranty2)
+              if type(warranty2)  ~= "userdata" and type(warranty)  ~= "userdata" then
+                  warn("on the script :", WANTEDSCRIPT[i], " there is a ", METHOD, "on ", warranty .. "."..warranty2)
+              end
+              if type(warranty) ~= "userdata" and type(warranty2) ~= "userdata" and  type(warranty3) ~= "userdata" then
+                  warn("on the script :", WANTEDSCRIPT[i], " there is a ", METHOD, "on ", warranty .."."..  warranty2.. ".".. warranty3)
+                  end
+         end
+    end    
+end
+
+
 -- Destroy checker
 if  WANTEDSCRIPT[i].Parent.Name == game:GetService("Players").LocalPlayer.Name and METHOD == "Destroy" then
- if  constants[newwanted[i] - 1] == "Parent" or constants[newwanted[i] - 2] == "Parent" or is_player_Children(constants[newwanted[i] - 2]) == true or is_player_Children(constants[newwanted[i] - 1]) == true  then
-     warn(METHOD," method applied on localplayer by;",  WANTEDSCRIPT[i])
-     table.insert(scripttohook, WANTEDSCRIPT[i])
- end
+if  constants[newwanted[i] - 1] == "Parent" or constants[newwanted[i] - 2] == "Parent" or is_player_Children(constants[newwanted[i] - 2]) == true or is_player_Children(constants[newwanted[i] - 1]) == true  then
+   warn(METHOD," method applied on localplayer by;",  WANTEDSCRIPT[i])
+   table.insert(scripttohook, WANTEDSCRIPT[i])
+end
 end
 
 
@@ -154,117 +155,164 @@ end
 if METHOD == "Kick" and slowkickdetection == true then
 local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
 local table1 = script:split("\n")
-   if table.concat(script:split(" ")) == "" then 
-    warn("              ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with KICK method")
-else 
-    print()
-end 
+ if table.concat(script:split(" ")) == "" then
+  warn("              ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with KICK method")
+else
+  print()
+end
 for i,v in pairs(table1) do
-   if table.concat(v:split("Kick")) ~= v then
-       if table.concat(v:split("LocalPlayer")) ~= v then
-           if WANTEDSCRIPT[i] ~= nil then
-           warn("Kick variable fired on LocalPlayer found at:", WANTEDSCRIPT[i])
-           print("Loading..." .. i.."/"..#WANTEDSCRIPT)
-           table.insert(scripttohook, WANTEDSCRIPT[i])
-           end
-           end 
-   end
+ if table.concat(v:split("Kick")) ~= v then
+     if table.concat(v:split("LocalPlayer")) ~= v then
+         if WANTEDSCRIPT[i] ~= nil then
+         warn("Kick variable fired on LocalPlayer found at:", WANTEDSCRIPT[i])
+         print("Loading..." .. i.."/"..#WANTEDSCRIPT)
+         table.insert(scripttohook, WANTEDSCRIPT[i])
+         end
+         end
+ end
 end
 end
 
 -- kicker printer
-if METHOD == "Kick" and PrintOutKicks == true then 
-    local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
-    if table.concat(script:split(" ")) == "" then 
-    warn("                 ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with KICK method")
-else 
-    print()
-end 
+if METHOD == "Kick" and PrintOutKicks == true then
+  local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
+  if table.concat(script:split(" ")) == "" then
+  warn("                 ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with KICK method")
+else
+  print()
+end
 local table1 = script:split("\n")
 for i2,v in pairs(table1) do
-    if table.concat(v:split("Kick"))  ~= v or table.concat(v:split("kick")) ~= v then 
-            warn("💀 ".."PrintOutKicks Debugger here: " ..v .. "  at localscript", WANTEDSCRIPT[i], "💀")
+  if table.concat(v:split("Kick"))  ~= v or table.concat(v:split("kick")) ~= v then
+          warn("? ".."PrintOutKicks Debugger here: " ..v .. "  at localscript", WANTEDSCRIPT[i] , " its parent:" , WANTEDSCRIPT[i].Parent, "?")
+       
+ 
+end
+end
+end
+
+
+
+
+if METHOD == WhatMethodYouWantToPrintOut then
+  local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
+  if table.concat(script:split(" ")) == "" then
+  warn("                 ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with".. METHOD .. " method")
+else
+  print()
+end
+local table1 = script:split("\n")
+for i2,v in pairs(table1) do
+  if table.concat(v:split(METHOD))  ~= v or table.concat(v:split(string.lower(METHOD))) ~= v then
+          warn("? ".."PrintOut"..METHOD.. "Checker Debugger here: " ..v .. "  at localscript", WANTEDSCRIPT[i] , " its parent:" , WANTEDSCRIPT[i].Parent, "?")
+       
+ 
+end
+end
+end
+
+
+
+
+
+if METHOD == "FireServer" and PrintOutFireServer == true then
+  local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
+  if table.concat(script:split(" ")) == "" then
+  warn("                 ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with FireServer method")
+else
+  print()
+end
+local table1 = script:split("\n")
+for i2,v in pairs(table1) do
+  if table.concat(v:split("FireServer"))  ~= v or table.concat(v:split("fireserver")) ~= v then
+          warn("? ".."PrintOutRemoteEvents Debugger here: " ..v .. "  at localscript", WANTEDSCRIPT[i], "?")
+       
+ 
+end
+end
+end
+
+
+if METHOD == "InvokeServer" and PrintOutInvokeServer == true then
+  local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
+  if table.concat(script:split(" ")) == "" then
+  warn("                 ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with InvokeServer method")
+else
+  print()
+end
+local table1 = script:split("\n")
+for i2,v in pairs(table1) do
+  if table.concat(v:split("InvokeServer"))  ~= v or table.concat(v:split("invokeserver")) ~= v then
+          warn("? ".."PrintOutRemoteFunctions Debugger here: " ..v .. "  at localscript", WANTEDSCRIPT[i], "?")
+       
+ 
+end
+end
+end
+
+
+if ConnectScan == true then 
+local nothingfound = {}
+local totalscripts = {}
+for index,v3 in pairs(PATH:GetDescendants()) do 
+    if v3:IsA(SCRIPT) then 
+         table.insert(totalscripts, index)
+         local script = decompile(getscriptclosure(v3))
+         local table1 = script:split("\n")
+         print("Loading.. " .. "#" ..  #totalscripts)
+local ends = {}
+local endpositions = {} 
+for i2,v in pairs(table1) do 
+    if table.concat(v:split("end)"))  ~= v   then
+        table.insert(ends, v)
+        table.insert(endpositions, i2)
+    end 
+end 
+local connectfunctions = {}
+local connectposition = {}
+local allstrings = {}
+for i2,v in pairs(table1) do
+    if table.concat(v:split("OnClientEvent"))  ~= v   then 
+        table.insert(connectfunctions, v)
+        table.insert(connectposition, i2)
            
      
 end 
 end 
+
+for i2,v in pairs(table1) do 
+    table.insert(allstrings, v)
 end 
 
-
-
-
-if METHOD == WhatMethodYouWantToPrintOut then 
-    local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
-    if table.concat(script:split(" ")) == "" then 
-    warn("                 ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with".. METHOD .. " method")
-else 
-    print()
+for i,v in pairs(connectfunctions) do 
+ -- checker: print(allstrings[connectposition[i]],allstrings[endpositions[i]])
+ for count = connectposition[i], endpositions[i], 1 do 
+     print(allstrings[count])
+     end 
+ 
 end 
-local table1 = script:split("\n")
-for i2,v in pairs(table1) do
-    if table.concat(v:split(METHOD))  ~= v or table.concat(v:split(string.lower(METHOD))) ~= v then 
-            warn("💀 ".."PrintOut"..METHOD.. "Checker Debugger here: " ..v .. "  at localscript", WANTEDSCRIPT[i], "💀")
-           
-     
-end 
+
 end 
 end 
 
-
-
-
-
-if METHOD == "FireServer" and PrintOutFireServer == true then 
-    local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
-    if table.concat(script:split(" ")) == "" then 
-    warn("                 ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with FireServer method")
-else 
-    print()
-end 
-local table1 = script:split("\n")
-for i2,v in pairs(table1) do
-    if table.concat(v:split("FireServer"))  ~= v or table.concat(v:split("fireserver")) ~= v then 
-            warn("💀 ".."PrintOutRemoteEvents Debugger here: " ..v .. "  at localscript", WANTEDSCRIPT[i], "💀")
-           
-     
-end 
-end 
-end 
-
-
-if METHOD == "InvokeServer" and PrintOutInvokeServer == true then 
-    local script = decompile(getscriptclosure(WANTEDSCRIPT[i]))
-    if table.concat(script:split(" ")) == "" then 
-    warn("                 ANTI DECOMPILER DETECTED" .. " on" , WANTEDSCRIPT[i], " with InvokeServer method")
-else 
-    print()
-end 
-local table1 = script:split("\n")
-for i2,v in pairs(table1) do
-    if table.concat(v:split("InvokeServer"))  ~= v or table.concat(v:split("invokeserver")) ~= v then 
-            warn("💀 ".."PrintOutRemoteFunctions Debugger here: " ..v .. "  at localscript", WANTEDSCRIPT[i], "💀")
-           
-     
-end 
-end 
-end 
+end
 
 
 
 
 -- Kick checker
 if  WANTEDSCRIPT[i].Parent.Name == game:GetService("Players").LocalPlayer.Name and METHOD == "Kick" then
- if  constants[newwanted[i] - 1] == "Parent" or constants[newwanted[i] - 2] == "Parent" or is_player_Children(constants[newwanted[i] - 2]) == true or is_player_Children(constants[newwanted[i] - 1]) == true or Contains_Number(constants[newwanted[i] - 1]) == true  then
-     warn(METHOD," method applied on localplayer by;",  WANTEDSCRIPT[i])
-     table.insert(scripttohook, WANTEDSCRIPT[i])
- end
+if  constants[newwanted[i] - 1] == "Parent" or constants[newwanted[i] - 2] == "Parent" or is_player_Children(constants[newwanted[i] - 2]) == true or is_player_Children(constants[newwanted[i] - 1]) == true or Contains_Number(constants[newwanted[i] - 1]) == true  then
+   warn(METHOD," method applied on localplayer by;",  WANTEDSCRIPT[i])
+   table.insert(scripttohook, WANTEDSCRIPT[i])
+end
 end
 
 print(WANTEDSCRIPT[i],METHOD .." at function",getinfo(functions[i]).name, functions[i])
 -- NOTE: makes part of the loop
 if constants[newwanted[i] - 2] == _Check or constants[newwanted[i] - 1] == _Check then
-  warn(METHOD, "on " .. _Check .. " found!", "script name:" ,WANTEDSCRIPT[i])
-          table.insert(scripttohook, WANTEDSCRIPT[i])
+warn(METHOD, "on " .. _Check .. " found!", "script name:" ,WANTEDSCRIPT[i])
+        table.insert(scripttohook, WANTEDSCRIPT[i])
 end
 
 end
@@ -278,8 +326,8 @@ X = hookmetamethod(v, "__namecall",function(self,...)
 local args = {...};
 local method = getnamecallmethod()
 if method == METHOD  then
-  return
+return
 end
 return X(self,...)
 end)
-end
+end 
